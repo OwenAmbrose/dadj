@@ -4,10 +4,11 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-	<title></title>
+	<title>JOKE.</title>
+  <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <a href="#" onclick="randomSite();">Random</a>
+    <button id="everybodydance"><span><a href="#" class="white" onclick="randomSite();">JOKE.</a></span></button>
     <script>
     var sites = [
         'file:///C:/Users/523oambrose/OneDrive%20-%20FRHSD/Web%20Design/DAb/joke1.html',
@@ -26,6 +27,37 @@
         var i = parseInt(Math.random() * sites.length);
         location.href = sites[i];
     }
+    var contextClass = (window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext || window.msAudioContext);
+var dance = document.getElementById("everybodydance");
+if (contextClass) {
+  var context = new contextClass();
+} else {
+  onError;
+}
+var request = new XMLHttpRequest();
+request.open('GET', "https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/gonna-make-you-sweat.mp3", true);
+request.responseType = 'arraybuffer';
+request.onload = function() {
+ context.decodeAudioData(request.response, function(theBuffer) {
+  buffer = theBuffer;
+  }, onError);
+}
+request.send();
+
+function onError() { console.log("Bad browser! No Web Audio API for you"); }
+
+function unpress() { dance.classList.remove("pressed"); }
+
+function playSound() {
+ dance.classList.add("pressed");
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+ source.connect(context.destination);
+  source.start(0);
+  var delay = 2000;
+  setTimeout(unpress,delay);
+}
+dance.addEventListener('click', function(event) { playSound(); });
 </script>
   </body>
 </html>
